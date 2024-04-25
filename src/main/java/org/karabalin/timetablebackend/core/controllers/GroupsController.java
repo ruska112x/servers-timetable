@@ -29,12 +29,12 @@ public class GroupsController {
     }
 
     @GetMapping("/groups/{id}")
-    public String getGroupById(@PathVariable("id") int id) {
+    public Group getGroupById(@PathVariable("id") long id) {
         Optional<Group> group = groupsService.getGrouById(id);
         if (group.isPresent()) {
-            return group.get().toString();
+            return group.get();
         } else {
-            return String.valueOf(group.isPresent());
+            throw new RuntimeException();
         }
     }
 
@@ -51,7 +51,7 @@ public class GroupsController {
     }
 
     @DeleteMapping("/groups/{id}")
-    public String deleteGroup(@PathVariable("id") int id) {
+    public String deleteGroup(@PathVariable("id") long id) {
         groupsService.deleteGroupById(id);
         return "deleteGroup";
     }

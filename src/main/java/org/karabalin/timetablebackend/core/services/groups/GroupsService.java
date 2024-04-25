@@ -24,14 +24,12 @@ public class GroupsService implements IGroupsService {
 
     @Override
     public Optional<Group> getGrouById(long id) {
-        Group group = groupsRepository.getGroupById(id);
-        return Optional.of(group);
+        return Optional.of(groupsRepository.getGroupById(id));
     }
 
     @Override
     public long addGroup(String name) {
-        long id = groupsRepository.addGroup(name);
-        return id;
+        return groupsRepository.addGroup(name);
     }
 
     @Override

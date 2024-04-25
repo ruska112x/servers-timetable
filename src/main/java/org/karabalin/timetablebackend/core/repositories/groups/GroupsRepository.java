@@ -15,32 +15,27 @@ import org.springframework.stereotype.Repository;
 public class GroupsRepository implements IGroupsRepository {
 
     private final JdbcOperations jdbcTemplate;
+    private final RowMapper<Group> grouRowMapper;
 
     public GroupsRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.grouRowMapper = (rs, rowNum) -> {
+            long groupId = rs.getInt("group_id");
+            String groupName = rs.getString("group_name");
+            return new Group(groupId, groupName);
+        };
     }
 
     @Override
     public List<Group> getAllGroups() {
         String sql = "select * from \"groups\"";
-        RowMapper<Group> rowMapper = (rs, rowNum) -> {
-            long groupId = rs.getInt("group_id");
-            String groupName = rs.getString("group_name");
-            return new Group(groupId, groupName);
-        };
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(sql, grouRowMapper);
     }
 
     @Override
     public Group getGroupById(long id) {
         String sql = "select * from \"groups\" where \"group_id\" = ?";
-        RowMapper<Group> rowMapper = (rs, rowNum) -> {
-            long groupId = rs.getInt("group_id");
-            String groupName = rs.getString("group_name");
-            return new Group(groupId, groupName);
-        };
-        Group group = jdbcTemplate.queryForObject(sql, rowMapper, id);
-        return group;
+        return jdbcTemplate.queryForObject(sql, grouRowMapper, id);
     }
 
     @Override
@@ -52,8 +47,7 @@ public class GroupsRepository implements IGroupsRepository {
             preparedStatement.setString(1, name);
             return preparedStatement;
         };
-        long id = jdbcTemplate.update(preparedStatementCreator, generatedKeyHolder);
-        return id;
+        return jdbcTemplate.update(preparedStatementCreator, generatedKeyHolder);
     }
 
     @Override

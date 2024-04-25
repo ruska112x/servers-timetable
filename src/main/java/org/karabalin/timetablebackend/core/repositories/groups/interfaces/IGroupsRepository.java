@@ -6,8 +6,12 @@ import org.karabalin.timetablebackend.core.models.Group;
 
 public interface IGroupsRepository {
     List<Group> getAllGroups();
+
     Group getGroupById(long id);
+
     long addGroup(String name);
+
     void editGroup(Group group);
+
     void deleteGroupById(long id);
 }
