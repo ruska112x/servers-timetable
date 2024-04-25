@@ -3,6 +3,7 @@ package org.karabalin.timetablebackend.core.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.karabalin.timetablebackend.core.models.Group;
 import org.karabalin.timetablebackend.core.services.groups.interfaces.IGroupsService;
@@ -29,21 +30,29 @@ public class GroupsController {
 
     @GetMapping("/groups/{id}")
     public String getGroupById(@PathVariable("id") int id) {
-        return String.valueOf(id);
+        Optional<Group> group = groupsService.getGrouById(id);
+        if (group.isPresent()) {
+            return group.get().toString();
+        } else {
+            return String.valueOf(group.isPresent());
+        }
     }
 
     @PostMapping("/groups")
-    public String addGroup(@RequestBody String entity) {
-        return entity;
+    public String addGroup(@RequestBody String name) {
+        groupsService.addGroup(name);
+        return "addGroup";
     }
 
-    @PutMapping("/groups/{id}")
-    public String editGroup(@PathVariable int id, @RequestBody String entity) {
-        return entity;
+    @PutMapping("/groups")
+    public String editGroup(@RequestBody Group group) {
+        groupsService.editGroup(group);
+        return "editGroup";
     }
 
     @DeleteMapping("/groups/{id}")
     public String deleteGroup(@PathVariable("id") int id) {
-        return String.valueOf(id);
+        groupsService.deleteGroupById(id);
+        return "deleteGroup";
     }
 }
