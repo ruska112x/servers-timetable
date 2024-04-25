@@ -13,7 +13,7 @@ INSERT INTO "students" (
 VALUES ('Mikula', 'Gerhard', 'study', 1),
     ('Shalashov', 'Maxim', 'study', 1),
     ('Shelyagin', 'Andrew', 'study', 2),
-    ('Imailov', 'Matew', 'study', 2);
+    ('Izmailov', 'Matew', 'study', 2);
 -- subjects
 INSERT INTO "subjects" ("subject_name")
 VALUES ('Calculus'),
