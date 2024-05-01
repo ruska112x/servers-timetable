@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/students")
 public class StudentsController {
 
     private final IStudentsService studentsService;
@@ -16,12 +17,12 @@ public class StudentsController {
         this.studentsService = studentsService;
     }
 
-    @GetMapping("/students")
+    @GetMapping
     public List<Student> getStudentsByGroupId(@RequestParam("groupId") long groupId) {
         return studentsService.getStudentsByGroupId(groupId);
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/{id}")
     public Student getStudentsById(@PathVariable("id") long id) {
         Optional<Student> student = studentsService.getStudentById(id);
         if (student.isPresent()) {
@@ -31,18 +32,18 @@ public class StudentsController {
         }
     }
 
-    @PostMapping("/students")
+    @PostMapping
     public long addStudent(@RequestBody Student student) {
         return studentsService.addStudent(student);
     }
 
-    @PutMapping("students")
+    @PutMapping
     public String editStudent(@RequestBody Student student) {
         studentsService.editStudent(student);
         return "editStudent";
     }
 
-    @DeleteMapping("/students/{id}")
+    @DeleteMapping("/{id}")
     public String deleteStudent(@PathVariable long id) {
         studentsService.deleteStudentById(id);
         return "deleteStudent";

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/groups")
 public class GroupsController {
 
     private final IGroupsService groupsService;
@@ -16,12 +17,12 @@ public class GroupsController {
         this.groupsService = groupsService;
     }
 
-    @GetMapping("/groups")
+    @GetMapping
     public List<Group> getAllGroups() {
         return groupsService.getAllGroups();
     }
 
-    @GetMapping("/groups/{id}")
+    @GetMapping("/{id}")
     public Group getGroupById(@PathVariable("id") long id) {
         Optional<Group> group = groupsService.getGrouById(id);
         if (group.isPresent()) {
@@ -31,19 +32,19 @@ public class GroupsController {
         }
     }
 
-    @PostMapping("/groups")
+    @PostMapping
     public String addGroup(@RequestBody String name) {
         groupsService.addGroup(name);
         return "addGroup";
     }
 
-    @PutMapping("/groups")
+    @PutMapping
     public String editGroup(@RequestBody Group group) {
         groupsService.editGroup(group);
         return "editGroup";
     }
 
-    @DeleteMapping("/groups/{id}")
+    @DeleteMapping("/{id}")
     public String deleteGroup(@PathVariable("id") long id) {
         groupsService.deleteGroupById(id);
         return "deleteGroup";

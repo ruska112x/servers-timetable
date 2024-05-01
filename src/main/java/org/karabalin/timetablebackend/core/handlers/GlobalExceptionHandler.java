@@ -6,18 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Optional;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     public ResponseEntity<String> incorrectResultSizeDataAccessHandler(IncorrectResultSizeDataAccessException e) {
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ofNullable(e.getMessage());
     }
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<String> dataAccessExceptionHandler(DataAccessException e) {
-        return ResponseEntity.of(Optional.of(e.getMessage()));
+        return ResponseEntity.ofNullable(e.getMessage());
     }
 }
