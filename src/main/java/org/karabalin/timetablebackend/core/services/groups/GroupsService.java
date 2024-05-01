@@ -1,12 +1,12 @@
 package org.karabalin.timetablebackend.core.services.groups;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.karabalin.timetablebackend.core.models.Group;
 import org.karabalin.timetablebackend.core.repositories.groups.interfaces.IGroupsRepository;
 import org.karabalin.timetablebackend.core.services.groups.interfaces.IGroupsService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupsService implements IGroupsService {

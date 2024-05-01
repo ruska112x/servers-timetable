@@ -1,8 +1,8 @@
 package org.karabalin.timetablebackend.core.repositories.groups.interfaces;
 
-import java.util.List;
-
 import org.karabalin.timetablebackend.core.models.Group;
+
+import java.util.List;
 
 public interface IGroupsRepository {
     List<Group> getAllGroups();

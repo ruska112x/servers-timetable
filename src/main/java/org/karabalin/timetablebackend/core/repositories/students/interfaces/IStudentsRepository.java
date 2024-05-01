@@ -1,8 +1,8 @@
 package org.karabalin.timetablebackend.core.repositories.students.interfaces;
 
-import java.util.List;
-
 import org.karabalin.timetablebackend.core.models.Student;
+
+import java.util.List;
 
 public interface IStudentsRepository {
     List<Student> getStudentsByGroupId(long id);

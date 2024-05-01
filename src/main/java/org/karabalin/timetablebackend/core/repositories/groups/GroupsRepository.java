@@ -1,8 +1,5 @@
 package org.karabalin.timetablebackend.core.repositories.groups;
 
-import java.sql.PreparedStatement;
-import java.util.List;
-
 import org.karabalin.timetablebackend.core.models.Group;
 import org.karabalin.timetablebackend.core.repositories.groups.interfaces.IGroupsRepository;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -10,6 +7,10 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class GroupsRepository implements IGroupsRepository {
@@ -43,11 +44,12 @@ public class GroupsRepository implements IGroupsRepository {
         String sql = "insert into \"groups\" (\"group_name\") values (?)";
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator preparedStatementCreator = conn -> {
-            PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[] { "group_id" });
+            PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"group_id"});
             preparedStatement.setString(1, name);
             return preparedStatement;
         };
-        return jdbcTemplate.update(preparedStatementCreator, generatedKeyHolder);
+        jdbcTemplate.update(preparedStatementCreator, generatedKeyHolder);
+        return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
     }
 
     @Override

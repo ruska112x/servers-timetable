@@ -1,9 +1,9 @@
 package org.karabalin.timetablebackend.core.services.students.interfaces;
 
+import org.karabalin.timetablebackend.core.models.Student;
+
 import java.util.List;
 import java.util.Optional;
-
-import org.karabalin.timetablebackend.core.models.Student;
 
 public interface IStudentsService {
     List<Student> getStudentsByGroupId(long id);
