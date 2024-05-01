@@ -9,6 +9,8 @@ public interface IGroupsRepository {
 
     List<Group> getGroupsByLessonId(long id);
 
+    void addGroupsForLesson(List<Object[]> idsList);
+
     Group getGroupById(long id);
 
     long addGroup(String name);

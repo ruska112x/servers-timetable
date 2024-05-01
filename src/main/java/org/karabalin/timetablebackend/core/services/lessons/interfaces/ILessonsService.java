@@ -1,5 +1,6 @@
 package org.karabalin.timetablebackend.core.services.lessons.interfaces;
 
+import org.karabalin.timetablebackend.core.models.FullLesson;
 import org.karabalin.timetablebackend.core.models.Lesson;
 import org.karabalin.timetablebackend.core.models.LessonWithAttendance;
 
@@ -12,9 +13,9 @@ public interface ILessonsService {
 
     LessonWithAttendance getLessonById(long id);
 
-    long addLesson(Lesson lesson);
+    long addLesson(FullLesson fullLesson);
 
-    void editLesson(Lesson lesson);
+    void editLesson(FullLesson fullLesson);
 
     void deleteLessonById(long id);
 }

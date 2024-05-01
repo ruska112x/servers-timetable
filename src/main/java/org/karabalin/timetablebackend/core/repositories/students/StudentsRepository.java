@@ -6,6 +6,7 @@ import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseExceptio
 import org.karabalin.timetablebackend.core.models.Student;
 import org.karabalin.timetablebackend.core.repositories.students.interfaces.IStudentsRepository;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,6 +55,30 @@ public class StudentsRepository implements IStudentsRepository {
             return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
         } catch (DataAccessException e) {
             throw new AddInDatabaseException("Can't add student: " + student);
+        }
+    }
+
+    @Override
+    public void addStudentsForLesson(List<Object[]> idsList) {
+        try {
+            String sql = "insert into \"attendance\" (\"lesson_id\", \"student_id\") values (?, ?)";
+            BatchPreparedStatementSetter batchPreparedStatementSetter = new BatchPreparedStatementSetter() {
+
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    ps.setLong(1, (Long) idsList.get(i)[0]);
+                    ps.setLong(2, (Long) idsList.get(i)[1]);
+                }
+
+                @Override
+                public int getBatchSize() {
+                    return idsList.size();
+                }
+            };
+            jdbcOperations.batchUpdate(sql, batchPreparedStatementSetter);
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+            throw new AddInDatabaseException("Can't add students for lesson :: " + idsList);
         }
     }
 

@@ -1,15 +1,13 @@
 package org.karabalin.timetablebackend.core.services.lessons;
 
-import org.karabalin.timetablebackend.core.models.Group;
-import org.karabalin.timetablebackend.core.models.Lesson;
-import org.karabalin.timetablebackend.core.models.LessonWithAttendance;
-import org.karabalin.timetablebackend.core.models.Student;
+import org.karabalin.timetablebackend.core.models.*;
 import org.karabalin.timetablebackend.core.repositories.groups.interfaces.IGroupsRepository;
 import org.karabalin.timetablebackend.core.repositories.lessons.interfaces.ILessonsRepository;
 import org.karabalin.timetablebackend.core.repositories.students.interfaces.IStudentsRepository;
 import org.karabalin.timetablebackend.core.services.lessons.interfaces.ILessonsService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,12 +42,39 @@ public class LessonsService implements ILessonsService {
     }
 
     @Override
-    public long addLesson(Lesson lesson) {
-        return lessonsRepository.addLesson(lesson);
+    public long addLesson(FullLesson fullLesson) {
+        Lesson lesson = fullLesson.getLesson();
+        long lessonId = lessonsRepository.addLesson(lesson);
+        List<Object[]> groups = new ArrayList<>();
+        List<Object[]> students = new ArrayList<>();
+        for (long groupId : fullLesson.getGroupIdList()) {
+            Long[] ids = new Long[]{lessonId, groupId};
+            groups.add(ids);
+        }
+        for (long studentId : fullLesson.getStudentIdList()) {
+            Long[] ids = new Long[]{lessonId, studentId};
+            students.add(ids);
+        }
+        groupsRepository.addGroupsForLesson(groups);
+        studentsRepository.addStudentsForLesson(students);
+        return lessonId;
     }
 
     @Override
-    public void editLesson(Lesson lesson) {
+    public void editLesson(FullLesson fullLesson) {
+        Lesson lesson = fullLesson.getLesson();
+        List<Object[]> groups = new ArrayList<>();
+        List<Object[]> students = new ArrayList<>();
+        for (long groupId : fullLesson.getGroupIdList()) {
+            Long[] ids = new Long[]{lesson.getId(), groupId};
+            groups.add(ids);
+        }
+        for (long studentId : fullLesson.getStudentIdList()) {
+            Long[] ids = new Long[]{lesson.getId(), studentId};
+            students.add(ids);
+        }
+        groupsRepository.addGroupsForLesson(groups);
+        studentsRepository.addStudentsForLesson(students);
         lessonsRepository.editLesson(lesson);
     }
 

@@ -9,6 +9,8 @@ public interface IStudentsRepository {
 
     List<Student> getStudentsByLessonId(long id);
 
+    void addStudentsForLesson(List<Object[]> idsList);
+
     Student getStudentById(long id);
 
     long addStudent(Student student);
