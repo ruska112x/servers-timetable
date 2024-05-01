@@ -1,6 +1,8 @@
 package org.karabalin.timetablebackend.core.controllers;
 
+import org.karabalin.timetablebackend.core.models.Lesson;
 import org.karabalin.timetablebackend.core.models.Teacher;
+import org.karabalin.timetablebackend.core.services.lessons.interfaces.ILessonsService;
 import org.karabalin.timetablebackend.core.services.teachers.interfaces.ITeachersService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +13,11 @@ import java.util.Optional;
 @RequestMapping("/teachers")
 public class TeachersController {
     private final ITeachersService teachersService;
+    private final ILessonsService lessonsService;
 
-    public TeachersController(ITeachersService teachersService) {
+    public TeachersController(ITeachersService teachersService, ILessonsService lessonsService) {
         this.teachersService = teachersService;
+        this.lessonsService = lessonsService;
     }
 
     @GetMapping
@@ -46,5 +50,10 @@ public class TeachersController {
     public String deleteTeacher(@PathVariable("id") long id) {
         teachersService.deleteTeacherById(id);
         return "deleteTeacher";
+    }
+
+    @GetMapping("/{id}/lessons")
+    public List<Lesson> getLessons(@PathVariable("id") long id, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+        return lessonsService.getLessonsByTeacherId(startDate, endDate, id);
     }
 }

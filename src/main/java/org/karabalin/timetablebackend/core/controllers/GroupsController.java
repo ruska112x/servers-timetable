@@ -1,7 +1,9 @@
 package org.karabalin.timetablebackend.core.controllers;
 
 import org.karabalin.timetablebackend.core.models.Group;
+import org.karabalin.timetablebackend.core.models.Lesson;
 import org.karabalin.timetablebackend.core.services.groups.interfaces.IGroupsService;
+import org.karabalin.timetablebackend.core.services.lessons.interfaces.ILessonsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class GroupsController {
 
     private final IGroupsService groupsService;
+    private final ILessonsService lessonsService;
 
-    public GroupsController(IGroupsService groupsService) {
+    public GroupsController(IGroupsService groupsService, ILessonsService lessonsService) {
         this.groupsService = groupsService;
+        this.lessonsService = lessonsService;
     }
 
     @GetMapping
@@ -48,5 +52,10 @@ public class GroupsController {
     public String deleteGroup(@PathVariable("id") long id) {
         groupsService.deleteGroupById(id);
         return "deleteGroup";
+    }
+
+    @GetMapping("/{id}/lessons")
+    public List<Lesson> getLessons(@PathVariable("id") long id, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+        return lessonsService.getLessonsByGroupId(startDate, endDate, id);
     }
 }

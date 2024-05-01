@@ -38,6 +38,12 @@ public class GroupsRepository implements IGroupsRepository {
     }
 
     @Override
+    public List<Group> getGroupsByLessonId(long id) {
+        String sql = "select g.\"group_id\", g.\"group_name\" from \"lessons_for_groups\" as lfg left join \"groups\" as g on lfg.\"group_id\" = g.\"group_id\" where lfg.\"lesson_id\" = ?";
+        return jdbcTemplate.query(sql, grouRowMapper, id);
+    }
+
+    @Override
     public Group getGroupById(long id) {
         try {
             String sql = "select * from \"groups\" where \"group_id\" = ?";

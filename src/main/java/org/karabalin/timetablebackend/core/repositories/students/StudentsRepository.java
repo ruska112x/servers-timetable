@@ -88,4 +88,10 @@ public class StudentsRepository implements IStudentsRepository {
         return jdbcOperations.query(sql, studentRowMapper, id);
     }
 
+    @Override
+    public List<Student> getStudentsByLessonId(long id) {
+        String sql = "select s.\"student_id\", s.\"student_surname\", s.\"student_name\", s.\"student_patronymic\", s.\"student_status\", s.\"group_id\" from \"attendance\" as a left join \"students\" as s on a.\"student_id\" = s.\"student_id\" where a.\"lesson_id\" = ?";
+        return jdbcOperations.query(sql, studentRowMapper, id);
+    }
+
 }
