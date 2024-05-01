@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 public class AddSubject {
-    @Size(min = 3, max = 32, message = "Length of group name must be from 3 to 32 chars")
+    @Size(min = 3, max = 32, message = "Length of subject name must be from 3 to 32 chars")
     private final String name;
 
     public AddSubject(String name) {

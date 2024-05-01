@@ -1,7 +1,13 @@
 package org.karabalin.timetablebackend.core.models;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+
 public class Subject {
+    @Min(1)
     private long id;
+
+    @Size(min = 3, max = 32, message = "Length of subject name must be from 3 to 32 chars")
     private String name;
 
     public Subject(long id, String name) {

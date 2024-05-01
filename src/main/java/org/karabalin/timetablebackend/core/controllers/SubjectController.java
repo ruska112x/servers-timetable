@@ -1,6 +1,8 @@
 package org.karabalin.timetablebackend.core.controllers;
 
+import jakarta.validation.Valid;
 import org.karabalin.timetablebackend.core.models.Subject;
+import org.karabalin.timetablebackend.core.models.requests.AddSubject;
 import org.karabalin.timetablebackend.core.services.subjects.interfaces.ISubjectsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +34,12 @@ public class SubjectController {
     }
 
     @PostMapping
-    public long addSubject(@RequestBody Subject subject) {
-        return subjectsService.addSubject(subject);
+    public long addSubject(@Valid @RequestBody AddSubject addSubject) {
+        return subjectsService.addSubject(addSubject);
     }
 
     @PutMapping
-    public String editSubject(@RequestBody Subject subject) {
+    public String editSubject(@Valid @RequestBody Subject subject) {
         subjectsService.editSubject(subject);
         return "editSubject";
     }

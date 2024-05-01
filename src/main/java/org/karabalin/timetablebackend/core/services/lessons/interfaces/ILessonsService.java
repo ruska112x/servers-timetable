@@ -3,6 +3,7 @@ package org.karabalin.timetablebackend.core.services.lessons.interfaces;
 import org.karabalin.timetablebackend.core.models.FullLesson;
 import org.karabalin.timetablebackend.core.models.Lesson;
 import org.karabalin.timetablebackend.core.models.LessonWithAttendance;
+import org.karabalin.timetablebackend.core.models.requests.AddLessonInSchedule;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface ILessonsService {
 
     LessonWithAttendance getLessonById(long id);
 
-    long addLesson(FullLesson fullLesson);
+    long addLesson(AddLessonInSchedule addLessonInSchedule);
 
     void editLesson(FullLesson fullLesson);
 

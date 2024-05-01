@@ -1,15 +1,14 @@
 package org.karabalin.timetablebackend.core.controllers;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import org.karabalin.timetablebackend.core.models.Group;
 import org.karabalin.timetablebackend.core.models.Lesson;
+import org.karabalin.timetablebackend.core.models.requests.AddGroup;
 import org.karabalin.timetablebackend.core.services.groups.interfaces.IGroupsService;
 import org.karabalin.timetablebackend.core.services.lessons.interfaces.ILessonsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/groups")
@@ -30,17 +29,12 @@ public class GroupsController {
 
     @GetMapping("/{id}")
     public Group getGroupById(@PathVariable("id") long id) {
-        Optional<Group> group = groupsService.getGroupById(id);
-        if (group.isPresent()) {
-            return group.get();
-        } else {
-            throw new RuntimeException();
-        }
+        return groupsService.getGroupById(id);
     }
 
     @PostMapping
-    public long addGroup(@RequestBody @Size(min = 3, max = 16, message = "Length of group name must be from 3 to 16 chars") String name) {
-        return groupsService.addGroup(name);
+    public long addGroup(@Valid @RequestBody AddGroup addGroup) {
+        return groupsService.addGroup(addGroup);
     }
 
     @PutMapping

@@ -1,7 +1,9 @@
 package org.karabalin.timetablebackend.core.controllers;
 
+import jakarta.validation.Valid;
 import org.karabalin.timetablebackend.core.models.FullLesson;
 import org.karabalin.timetablebackend.core.models.LessonWithAttendance;
+import org.karabalin.timetablebackend.core.models.requests.AddLessonInSchedule;
 import org.karabalin.timetablebackend.core.services.lessons.interfaces.ILessonsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +23,12 @@ public class LessonsController {
     }
 
     @PostMapping
-    public long addLesson(@RequestBody FullLesson fullLesson) {
-        return lessonsService.addLesson(fullLesson);
+    public long addLesson(@Valid @RequestBody AddLessonInSchedule addLessonInSchedule) {
+        return lessonsService.addLesson(addLessonInSchedule);
     }
 
     @PutMapping
-    public void editLesson(@RequestBody FullLesson fullLesson) {
+    public void editLesson(@Valid @RequestBody FullLesson fullLesson) {
         lessonsService.editLesson(fullLesson);
     }
 

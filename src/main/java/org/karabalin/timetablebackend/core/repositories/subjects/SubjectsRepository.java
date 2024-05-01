@@ -4,6 +4,7 @@ import org.karabalin.timetablebackend.core.exceptions.AddInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.EditInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseException;
 import org.karabalin.timetablebackend.core.models.Subject;
+import org.karabalin.timetablebackend.core.models.requests.AddSubject;
 import org.karabalin.timetablebackend.core.repositories.subjects.interfaces.ISubjectRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -48,19 +49,19 @@ public class SubjectsRepository implements ISubjectRepository {
     }
 
     @Override
-    public long addSubject(Subject subject) {
+    public long addSubject(AddSubject addSubject) {
         try {
             String sql = "insert into \"subjects\" (\"subject_name\") values (?)";
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             PreparedStatementCreator preparedStatementCreator = conn -> {
                 PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"subject_id"});
-                preparedStatement.setString(1, subject.getName());
+                preparedStatement.setString(1, addSubject.getName());
                 return preparedStatement;
             };
             jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
             return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
         } catch (DataAccessException e) {
-            throw new AddInDatabaseException("Can't add subject: " + subject);
+            throw new AddInDatabaseException("Can't add subject: " + addSubject.getName());
         }
     }
 

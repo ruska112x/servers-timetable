@@ -1,6 +1,8 @@
 package org.karabalin.timetablebackend.core.services.lessons;
 
 import org.karabalin.timetablebackend.core.models.*;
+import org.karabalin.timetablebackend.core.models.requests.AddLesson;
+import org.karabalin.timetablebackend.core.models.requests.AddLessonInSchedule;
 import org.karabalin.timetablebackend.core.repositories.groups.interfaces.IGroupsRepository;
 import org.karabalin.timetablebackend.core.repositories.lessons.interfaces.ILessonsRepository;
 import org.karabalin.timetablebackend.core.repositories.students.interfaces.IStudentsRepository;
@@ -42,16 +44,16 @@ public class LessonsService implements ILessonsService {
     }
 
     @Override
-    public long addLesson(FullLesson fullLesson) {
-        Lesson lesson = fullLesson.getLesson();
-        long lessonId = lessonsRepository.addLesson(lesson);
+    public long addLesson(AddLessonInSchedule addLessonInSchedule) {
+        AddLesson addLesson = new AddLesson(addLessonInSchedule.getDate(), addLessonInSchedule.getNumberInSchedule(), addLessonInSchedule.getSubjectId(), addLessonInSchedule.getTeacherId());
+        long lessonId = lessonsRepository.addLesson(addLesson);
         List<Object[]> groups = new ArrayList<>();
         List<Object[]> students = new ArrayList<>();
-        for (long groupId : fullLesson.getGroupIdList()) {
+        for (long groupId : addLessonInSchedule.getGroupIdList()) {
             Long[] ids = new Long[]{lessonId, groupId};
             groups.add(ids);
         }
-        for (long studentId : fullLesson.getStudentIdList()) {
+        for (long studentId : addLessonInSchedule.getStudentIdList()) {
             Long[] ids = new Long[]{lessonId, studentId};
             students.add(ids);
         }
@@ -62,7 +64,7 @@ public class LessonsService implements ILessonsService {
 
     @Override
     public void editLesson(FullLesson fullLesson) {
-        Lesson lesson = fullLesson.getLesson();
+        Lesson lesson = new Lesson(fullLesson.getId(), fullLesson.getDate(), fullLesson.getNumberInSchedule(), fullLesson.getSubjectId(), fullLesson.getTeacherId());
         List<Object[]> groups = new ArrayList<>();
         List<Object[]> students = new ArrayList<>();
         for (long groupId : fullLesson.getGroupIdList()) {

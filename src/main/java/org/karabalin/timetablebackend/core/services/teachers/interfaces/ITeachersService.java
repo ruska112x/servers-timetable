@@ -1,6 +1,7 @@
 package org.karabalin.timetablebackend.core.services.teachers.interfaces;
 
 import org.karabalin.timetablebackend.core.models.Teacher;
+import org.karabalin.timetablebackend.core.models.requests.AddTeacher;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ public interface ITeachersService {
 
     Optional<Teacher> getTeacherById(long id);
 
-    long addTeacher(Teacher teacher);
+    long addTeacher(AddTeacher addTeacher);
 
     void editTeacher(Teacher teacher);
 

@@ -1,16 +1,16 @@
 package org.karabalin.timetablebackend.core.services.groups.interfaces;
 
 import org.karabalin.timetablebackend.core.models.Group;
+import org.karabalin.timetablebackend.core.models.requests.AddGroup;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IGroupsService {
     List<Group> getAllGroups();
 
-    Optional<Group> getGroupById(long id);
+    Group getGroupById(long id);
 
-    long addGroup(String name);
+    long addGroup(AddGroup addGroup);
 
     void editGroup(Group group);
 

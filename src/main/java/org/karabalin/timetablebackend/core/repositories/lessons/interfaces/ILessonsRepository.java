@@ -1,6 +1,7 @@
 package org.karabalin.timetablebackend.core.repositories.lessons.interfaces;
 
 import org.karabalin.timetablebackend.core.models.Lesson;
+import org.karabalin.timetablebackend.core.models.requests.AddLesson;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface ILessonsRepository {
 
     Lesson getLessonById(long id);
 
-    long addLesson(Lesson lesson);
+    long addLesson(AddLesson addLesson);
 
     void editLesson(Lesson lesson);
 

@@ -1,6 +1,7 @@
 package org.karabalin.timetablebackend.core.repositories.students.interfaces;
 
 import org.karabalin.timetablebackend.core.models.Student;
+import org.karabalin.timetablebackend.core.models.requests.AddStudent;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface IStudentsRepository {
 
     Student getStudentById(long id);
 
-    long addStudent(Student student);
+    long addStudent(AddStudent addStudent);
 
     void editStudent(Student student);
 

@@ -1,6 +1,7 @@
 package org.karabalin.timetablebackend.core.services.students;
 
 import org.karabalin.timetablebackend.core.models.Student;
+import org.karabalin.timetablebackend.core.models.requests.AddStudent;
 import org.karabalin.timetablebackend.core.repositories.students.interfaces.IStudentsRepository;
 import org.karabalin.timetablebackend.core.services.students.interfaces.IStudentsService;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public long addStudent(Student student) {
-        return studentsRepository.addStudent(student);
+    public long addStudent(AddStudent addStudent) {
+        return studentsRepository.addStudent(addStudent);
     }
 
     @Override

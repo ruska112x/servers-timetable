@@ -1,6 +1,7 @@
 package org.karabalin.timetablebackend.core.services.subjects;
 
 import org.karabalin.timetablebackend.core.models.Subject;
+import org.karabalin.timetablebackend.core.models.requests.AddSubject;
 import org.karabalin.timetablebackend.core.repositories.subjects.interfaces.ISubjectRepository;
 import org.karabalin.timetablebackend.core.services.subjects.interfaces.ISubjectsService;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class SubjectsService implements ISubjectsService {
     }
 
     @Override
-    public long addSubject(Subject subject) {
-        return subjectRepository.addSubject(subject);
+    public long addSubject(AddSubject addSubject) {
+        return subjectRepository.addSubject(addSubject);
     }
 
     @Override

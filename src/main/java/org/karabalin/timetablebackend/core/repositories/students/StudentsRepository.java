@@ -4,6 +4,7 @@ import org.karabalin.timetablebackend.core.exceptions.AddInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.EditInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseException;
 import org.karabalin.timetablebackend.core.models.Student;
+import org.karabalin.timetablebackend.core.models.requests.AddStudent;
 import org.karabalin.timetablebackend.core.repositories.students.interfaces.IStudentsRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -38,23 +39,23 @@ public class StudentsRepository implements IStudentsRepository {
     }
 
     @Override
-    public long addStudent(Student student) {
+    public long addStudent(AddStudent addStudent) {
         try {
             String sql = "insert into \"students\" (\"student_surname\", \"student_name\", \"student_patronymic\", \"student_status\", \"group_id\") values (?, ?, ?, ?, ?)";
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             PreparedStatementCreator preparedStatementCreator = conn -> {
                 PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"student_id"});
-                preparedStatement.setString(1, student.getSurname());
-                preparedStatement.setString(2, student.getName());
-                preparedStatement.setString(3, student.getPatronymic());
-                preparedStatement.setString(4, student.getStatus());
-                preparedStatement.setLong(5, student.getGroupId());
+                preparedStatement.setString(1, addStudent.getSurname());
+                preparedStatement.setString(2, addStudent.getName());
+                preparedStatement.setString(3, addStudent.getPatronymic());
+                preparedStatement.setString(4, addStudent.getStatus());
+                preparedStatement.setLong(5, addStudent.getGroupId());
                 return preparedStatement;
             };
             jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
             return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
         } catch (DataAccessException e) {
-            throw new AddInDatabaseException("Can't add student: " + student);
+            throw new AddInDatabaseException("Can't add student: " + addStudent);
         }
     }
 

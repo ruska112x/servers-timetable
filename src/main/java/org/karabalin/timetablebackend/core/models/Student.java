@@ -1,11 +1,25 @@
 package org.karabalin.timetablebackend.core.models;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+
 public class Student {
+    @Min(1)
     private long id;
+
+    @Size(min = 3, max = 32, message = "Length of student surname must be from 3 to 32 chars")
     private String surname;
+
+    @Size(min = 3, max = 32, message = "Length of student name must be from 3 to 32 chars")
     private String name;
+
+    @Size(min = 3, max = 32, message = "Length of student patronymic must be from 3 to 32 chars")
     private String patronymic;
+
+    @Size(min = 3, max = 32, message = "Length of student status name must be from 3 to 32 chars")
     private String status;
+
+    @Min(1)
     private long groupId;
 
     public Student(long id, String surname, String name, String patronymic, String status, long groupId) {

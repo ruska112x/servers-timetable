@@ -4,6 +4,7 @@ import org.karabalin.timetablebackend.core.exceptions.AddInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.EditInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseException;
 import org.karabalin.timetablebackend.core.models.Lesson;
+import org.karabalin.timetablebackend.core.models.requests.AddLesson;
 import org.karabalin.timetablebackend.core.repositories.lessons.interfaces.ILessonsRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -57,22 +58,22 @@ public class LessonsRepository implements ILessonsRepository {
     }
 
     @Override
-    public long addLesson(Lesson lesson) {
+    public long addLesson(AddLesson addLesson) {
         try {
             String sql = "insert into \"lessons\" (\"lesson_date\", \"lesson_number_in_schedule\", \"subject_id\", \"teacher_id\") values (TO_DATE(?, 'DDMMYYYY'), ?, ?, ?)";
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             PreparedStatementCreator preparedStatementCreator = conn -> {
                 PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"lesson_id"});
-                preparedStatement.setString(1, lesson.getDate());
-                preparedStatement.setLong(2, lesson.getNumberInSchedule());
-                preparedStatement.setLong(3, lesson.getSubjectId());
-                preparedStatement.setLong(4, lesson.getTeacherId());
+                preparedStatement.setString(1, addLesson.getDate());
+                preparedStatement.setLong(2, addLesson.getNumberInSchedule());
+                preparedStatement.setLong(3, addLesson.getSubjectId());
+                preparedStatement.setLong(4, addLesson.getTeacherId());
                 return preparedStatement;
             };
             jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
             return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
         } catch (DataAccessException e) {
-            throw new AddInDatabaseException("Can't add lesson: " + lesson);
+            throw new AddInDatabaseException("Can't add lesson: " + addLesson);
         }
     }
 

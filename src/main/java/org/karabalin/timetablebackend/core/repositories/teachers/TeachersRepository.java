@@ -4,6 +4,7 @@ import org.karabalin.timetablebackend.core.exceptions.AddInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.EditInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseException;
 import org.karabalin.timetablebackend.core.models.Teacher;
+import org.karabalin.timetablebackend.core.models.requests.AddTeacher;
 import org.karabalin.timetablebackend.core.repositories.teachers.interfaces.ITeachersRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -51,22 +52,22 @@ public class TeachersRepository implements ITeachersRepository {
     }
 
     @Override
-    public long addTeacher(Teacher teacher) {
+    public long addTeacher(AddTeacher addTeacher) {
         try {
             String sql = "insert into \"teachers\" (\"teacher_surname\", \"teacher_name\", \"teacher_patronymic\", \"teacher_position\") values (?, ?, ?, ?)";
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             PreparedStatementCreator preparedStatementCreator = conn -> {
                 PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"teacher_id"});
-                preparedStatement.setString(1, teacher.getSurname());
-                preparedStatement.setString(2, teacher.getName());
-                preparedStatement.setString(3, teacher.getPatronymic());
-                preparedStatement.setString(4, teacher.getPosition());
+                preparedStatement.setString(1, addTeacher.getSurname());
+                preparedStatement.setString(2, addTeacher.getName());
+                preparedStatement.setString(3, addTeacher.getPatronymic());
+                preparedStatement.setString(4, addTeacher.getPosition());
                 return preparedStatement;
             };
             jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
             return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
         } catch (DataAccessException e) {
-            throw new AddInDatabaseException("Can't add teacher: " + teacher);
+            throw new AddInDatabaseException("Can't add teacher: " + addTeacher);
         }
     }
 

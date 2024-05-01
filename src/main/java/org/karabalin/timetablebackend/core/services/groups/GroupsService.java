@@ -1,12 +1,12 @@
 package org.karabalin.timetablebackend.core.services.groups;
 
 import org.karabalin.timetablebackend.core.models.Group;
+import org.karabalin.timetablebackend.core.models.requests.AddGroup;
 import org.karabalin.timetablebackend.core.repositories.groups.interfaces.IGroupsRepository;
 import org.karabalin.timetablebackend.core.services.groups.interfaces.IGroupsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GroupsService implements IGroupsService {
@@ -23,13 +23,13 @@ public class GroupsService implements IGroupsService {
     }
 
     @Override
-    public Optional<Group> getGroupById(long id) {
-        return Optional.of(groupsRepository.getGroupById(id));
+    public Group getGroupById(long id) {
+        return groupsRepository.getGroupById(id);
     }
 
     @Override
-    public long addGroup(String name) {
-        return groupsRepository.addGroup(name);
+    public long addGroup(AddGroup addGroup) {
+        return groupsRepository.addGroup(addGroup);
     }
 
     @Override

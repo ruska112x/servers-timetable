@@ -1,6 +1,7 @@
 package org.karabalin.timetablebackend.core.services.teachers;
 
 import org.karabalin.timetablebackend.core.models.Teacher;
+import org.karabalin.timetablebackend.core.models.requests.AddTeacher;
 import org.karabalin.timetablebackend.core.repositories.teachers.interfaces.ITeachersRepository;
 import org.karabalin.timetablebackend.core.services.teachers.interfaces.ITeachersService;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
-    public long addTeacher(Teacher teacher) {
-        return teachersRepository.addTeacher(teacher);
+    public long addTeacher(AddTeacher addTeacher) {
+        return teachersRepository.addTeacher(addTeacher);
     }
 
     @Override
