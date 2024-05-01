@@ -1,7 +1,11 @@
 package org.karabalin.timetablebackend.core.repositories.teachers;
 
+import org.karabalin.timetablebackend.core.exceptions.AddInDatabaseException;
+import org.karabalin.timetablebackend.core.exceptions.EditInDatabaseException;
+import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseException;
 import org.karabalin.timetablebackend.core.models.Teacher;
 import org.karabalin.timetablebackend.core.repositories.teachers.interfaces.ITeachersRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,30 +42,42 @@ public class TeachersRepository implements ITeachersRepository {
 
     @Override
     public Teacher getTeacherById(long id) {
-        String sql = "select * from \"teachers\" where \"teacher_id\" = ?";
-        return jdbcOperations.queryForObject(sql, teacherRowMapper, id);
+        try {
+            String sql = "select * from \"teachers\" where \"teacher_id\" = ?";
+            return jdbcOperations.queryForObject(sql, teacherRowMapper, id);
+        } catch (DataAccessException e) {
+            throw new NotFoundInDatabaseException("Teacher with id: " + id + " not found");
+        }
     }
 
     @Override
     public long addTeacher(Teacher teacher) {
-        String sql = "insert into \"teachers\" (\"teacher_surname\", \"teacher_name\", \"teacher_patronymic\", \"teacher_position\") values (?, ?, ?, ?)";
-        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        PreparedStatementCreator preparedStatementCreator = conn -> {
-            PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"teacher_id"});
-            preparedStatement.setString(1, teacher.getSurname());
-            preparedStatement.setString(2, teacher.getName());
-            preparedStatement.setString(3, teacher.getPatronymic());
-            preparedStatement.setString(4, teacher.getPosition());
-            return preparedStatement;
-        };
-        jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
-        return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
+        try {
+            String sql = "insert into \"teachers\" (\"teacher_surname\", \"teacher_name\", \"teacher_patronymic\", \"teacher_position\") values (?, ?, ?, ?)";
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            PreparedStatementCreator preparedStatementCreator = conn -> {
+                PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"teacher_id"});
+                preparedStatement.setString(1, teacher.getSurname());
+                preparedStatement.setString(2, teacher.getName());
+                preparedStatement.setString(3, teacher.getPatronymic());
+                preparedStatement.setString(4, teacher.getPosition());
+                return preparedStatement;
+            };
+            jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
+            return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
+        } catch (DataAccessException e) {
+            throw new AddInDatabaseException("Can't add teacher: " + teacher);
+        }
     }
 
     @Override
     public void editTeacher(Teacher teacher) {
-        String sql = "update \"teachers\" set \"teacher_surname\" = ?, \"teacher_name\" = ?, \"teacher_patronymic\" = ?, \"teacher_position\" = ? where \"teacher_id\" = ?";
-        jdbcOperations.update(sql, teacher.getSurname(), teacher.getName(), teacher.getPatronymic(), teacher.getPosition(), teacher.getId());
+        try {
+            String sql = "update \"teachers\" set \"teacher_surname\" = ?, \"teacher_name\" = ?, \"teacher_patronymic\" = ?, \"teacher_position\" = ? where \"teacher_id\" = ?";
+            jdbcOperations.update(sql, teacher.getSurname(), teacher.getName(), teacher.getPatronymic(), teacher.getPosition(), teacher.getId());
+        } catch (DataAccessException e) {
+            throw new EditInDatabaseException("Can't edit teacher: " + teacher);
+        }
     }
 
     @Override
