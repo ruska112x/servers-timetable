@@ -1,14 +1,20 @@
 package org.karabalin.timetablebackend.core.repositories.lessons;
 
+import org.karabalin.timetablebackend.core.exceptions.AddInDatabaseException;
+import org.karabalin.timetablebackend.core.exceptions.EditInDatabaseException;
 import org.karabalin.timetablebackend.core.exceptions.NotFoundInDatabaseException;
 import org.karabalin.timetablebackend.core.models.Lesson;
 import org.karabalin.timetablebackend.core.repositories.lessons.interfaces.ILessonsRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class LessonsRepository implements ILessonsRepository {
@@ -48,5 +54,41 @@ public class LessonsRepository implements ILessonsRepository {
         } catch (DataAccessException e) {
             throw new NotFoundInDatabaseException("Lesson with id: " + id + " not found");
         }
+    }
+
+    @Override
+    public long addLesson(Lesson lesson) {
+        try {
+            String sql = "insert into \"lessons\" (\"lesson_date\", \"lesson_number_in_schedule\", \"subject_id\", \"teacher_id\") values (TO_DATE(?, 'DDMMYYYY'), ?, ?, ?)";
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            PreparedStatementCreator preparedStatementCreator = conn -> {
+                PreparedStatement preparedStatement = conn.prepareStatement(sql, new String[]{"lesson_id"});
+                preparedStatement.setString(1, lesson.getDate());
+                preparedStatement.setLong(2, lesson.getNumberInSchedule());
+                preparedStatement.setLong(3, lesson.getSubjectId());
+                preparedStatement.setLong(4, lesson.getTeacherId());
+                return preparedStatement;
+            };
+            jdbcOperations.update(preparedStatementCreator, generatedKeyHolder);
+            return Objects.requireNonNull(generatedKeyHolder.getKey()).longValue();
+        } catch (DataAccessException e) {
+            throw new AddInDatabaseException("Can't add lesson: " + lesson);
+        }
+    }
+
+    @Override
+    public void editLesson(Lesson lesson) {
+        try {
+            String sql = "update \"lessons\" set \"lesson_date\" = TO_DATE(?, 'DDMMYYYY'), \"lesson_number_in_schedule\" = ?, \"subject_id\" = ?, \"teacher_id\" = ? where \"lesson_id\" = ?";
+            jdbcOperations.update(sql, lesson.getDate(), lesson.getNumberInSchedule(), lesson.getSubjectId(), lesson.getTeacherId(), lesson.getId());
+        } catch (DataAccessException e) {
+            throw new EditInDatabaseException("Can't edit lesson: " + lesson);
+        }
+    }
+
+    @Override
+    public void deleteLessonById(long id) {
+        String sql = "delete from \"lessons\" where \"lesson_id\" = ?";
+        jdbcOperations.update(sql, id);
     }
 }

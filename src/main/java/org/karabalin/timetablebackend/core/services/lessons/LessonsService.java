@@ -42,4 +42,19 @@ public class LessonsService implements ILessonsService {
         List<Student> students = studentsRepository.getStudentsByLessonId(id);
         return new LessonWithAttendance(lesson, students);
     }
+
+    @Override
+    public long addLesson(Lesson lesson) {
+        return lessonsRepository.addLesson(lesson);
+    }
+
+    @Override
+    public void editLesson(Lesson lesson) {
+        lessonsRepository.editLesson(lesson);
+    }
+
+    @Override
+    public void deleteLessonById(long id) {
+        lessonsRepository.deleteLessonById(id);
+    }
 }

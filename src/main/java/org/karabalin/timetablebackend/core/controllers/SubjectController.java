@@ -32,7 +32,7 @@ public class SubjectController {
     }
 
     @PostMapping
-    public long addSubject(Subject subject) {
+    public long addSubject(@RequestBody Subject subject) {
         return subjectsService.addSubject(subject);
     }
 

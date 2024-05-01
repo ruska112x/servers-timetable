@@ -10,4 +10,10 @@ public interface ILessonsRepository {
     List<Lesson> getLessonsByTeacherId(String startDate, String endDate, long teacherId);
 
     Lesson getLessonById(long id);
+
+    long addLesson(Lesson lesson);
+
+    void editLesson(Lesson lesson);
+
+    void deleteLessonById(long id);
 }

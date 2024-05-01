@@ -50,4 +50,7 @@ VALUES (TO_DATE('23042024', 'DDMMYYYY'), 3, 1, 1),
 INSERT INTO "lessons_for_groups" ("lesson_id", "group_id")
 VALUES (1, 2),
     (2, 1);
+INSERT INTO "attendance" ("lesson_id", "student_id")
+VALUES (1, 1),
+    (1, 2);
 COMMIT;
