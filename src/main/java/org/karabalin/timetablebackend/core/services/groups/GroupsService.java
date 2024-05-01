@@ -23,7 +23,7 @@ public class GroupsService implements IGroupsService {
     }
 
     @Override
-    public Optional<Group> getGrouById(long id) {
+    public Optional<Group> getGroupById(long id) {
         return Optional.of(groupsRepository.getGroupById(id));
     }
 

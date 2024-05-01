@@ -1,7 +1,10 @@
 package org.karabalin.timetablebackend.core.models;
 
+import jakarta.validation.constraints.Size;
+
 public class Group {
     private long id;
+    @Size(min = 3, max = 16, message = "Length of group name must be from 3 to 16 chars")
     private String name;
 
     public Group(long id, String name) {

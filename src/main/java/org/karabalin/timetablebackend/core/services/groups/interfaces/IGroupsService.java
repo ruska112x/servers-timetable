@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IGroupsService {
     List<Group> getAllGroups();
 
-    Optional<Group> getGrouById(long id);
+    Optional<Group> getGroupById(long id);
 
     long addGroup(String name);
 

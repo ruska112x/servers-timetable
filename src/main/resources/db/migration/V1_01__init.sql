@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "groups" (
 );
 CREATE TABLE IF NOT EXISTS "students" (
     "student_id" SERIAL PRIMARY KEY,
-    "student_surname" varchar(64) NOT NULL,
+    "student_surname" varchar(32) NOT NULL,
     "student_name" varchar(32) NOT NULL,
     "student_patronymic" varchar(32),
     "student_status" varchar(32) NOT NULL,
