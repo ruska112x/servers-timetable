@@ -81,7 +81,10 @@ public class LessonsRepository implements ILessonsRepository {
     public void editLesson(Lesson lesson) {
         try {
             String sql = "update \"lessons\" set \"lesson_date\" = TO_DATE(?, 'DDMMYYYY'), \"lesson_number_in_schedule\" = ?, \"subject_id\" = ?, \"teacher_id\" = ? where \"lesson_id\" = ?";
-            jdbcOperations.update(sql, lesson.getDate(), lesson.getNumberInSchedule(), lesson.getSubjectId(), lesson.getTeacherId(), lesson.getId());
+            int rowsChanged = jdbcOperations.update(sql, lesson.getDate(), lesson.getNumberInSchedule(), lesson.getSubjectId(), lesson.getTeacherId(), lesson.getId());
+            if (rowsChanged == 0) {
+                throw new EditInDatabaseException("Can't edit lesson: " + lesson);
+            }
         } catch (DataAccessException e) {
             throw new EditInDatabaseException("Can't edit lesson: " + lesson);
         }
@@ -90,6 +93,9 @@ public class LessonsRepository implements ILessonsRepository {
     @Override
     public void deleteLessonById(long id) {
         String sql = "delete from \"lessons\" where \"lesson_id\" = ?";
-        jdbcOperations.update(sql, id);
+        int rowsChanged = jdbcOperations.update(sql, id);
+        if (rowsChanged == 0) {
+            throw new EditInDatabaseException("Can't delete lesson with id: " + id);
+        }
     }
 }

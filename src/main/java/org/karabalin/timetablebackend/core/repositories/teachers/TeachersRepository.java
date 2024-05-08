@@ -75,7 +75,10 @@ public class TeachersRepository implements ITeachersRepository {
     public void editTeacher(Teacher teacher) {
         try {
             String sql = "update \"teachers\" set \"teacher_surname\" = ?, \"teacher_name\" = ?, \"teacher_patronymic\" = ?, \"teacher_position\" = ? where \"teacher_id\" = ?";
-            jdbcOperations.update(sql, teacher.getSurname(), teacher.getName(), teacher.getPatronymic(), teacher.getPosition(), teacher.getId());
+            int rowsChanged = jdbcOperations.update(sql, teacher.getSurname(), teacher.getName(), teacher.getPatronymic(), teacher.getPosition(), teacher.getId());
+            if (rowsChanged == 0) {
+                throw new EditInDatabaseException("Can't edit teacher: " + teacher);
+            }
         } catch (DataAccessException e) {
             throw new EditInDatabaseException("Can't edit teacher: " + teacher);
         }
@@ -84,6 +87,9 @@ public class TeachersRepository implements ITeachersRepository {
     @Override
     public void deleteTeacherById(long id) {
         String sql = "delete from \"teachers\" where \"teacher_id\" = ?";
-        jdbcOperations.update(sql, id);
+        int rowsChanged = jdbcOperations.update(sql, id);
+        if (rowsChanged == 0) {
+            throw new EditInDatabaseException("Can't delete teacher with id: " + id);
+        }
     }
 }

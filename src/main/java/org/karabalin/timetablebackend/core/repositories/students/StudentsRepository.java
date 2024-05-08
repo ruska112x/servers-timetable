@@ -86,14 +86,20 @@ public class StudentsRepository implements IStudentsRepository {
     @Override
     public void deleteStudentById(long id) {
         String sql = "delete from \"students\" where \"student_id\" = ?";
-        jdbcOperations.update(sql, id);
+        int rowsChanged = jdbcOperations.update(sql, id);
+        if (rowsChanged == 0) {
+            throw new EditInDatabaseException("Can't delete student with id: " + id);
+        }
     }
 
     @Override
     public void editStudent(Student student) {
         try {
             String sql = "update \"students\" set \"student_surname\" = ?, \"student_name\" = ?, \"student_patronymic\" = ?, \"student_status\" = ?, \"group_id\" = ? where \"student_id\" = ?";
-            jdbcOperations.update(sql, student.getSurname(), student.getName(), student.getPatronymic(), student.getStatus(), student.getGroupId(), student.getId());
+            int rowsChanged = jdbcOperations.update(sql, student.getSurname(), student.getName(), student.getPatronymic(), student.getStatus(), student.getGroupId(), student.getId());
+            if (rowsChanged == 0) {
+                throw new EditInDatabaseException("Can't edit student: " + student);
+            }
         } catch (DataAccessException e) {
             throw new EditInDatabaseException("Can't edit student: " + student);
         }

@@ -69,7 +69,10 @@ public class SubjectsRepository implements ISubjectRepository {
     public void editSubject(Subject subject) {
         try {
             String sql = "update \"subjects\" set \"subject_name\" = ? where \"subject_id\" = ?";
-            jdbcOperations.update(sql, subject.getName(), subject.getId());
+            int rowsChanged = jdbcOperations.update(sql, subject.getName(), subject.getId());
+            if (rowsChanged == 0) {
+                throw new EditInDatabaseException("Can't edit subject: " + subject);
+            }
         } catch (DataAccessException e) {
             throw new EditInDatabaseException("Can't edit subject: " + subject);
         }
@@ -78,6 +81,9 @@ public class SubjectsRepository implements ISubjectRepository {
     @Override
     public void deleteSubjectById(long id) {
         String sql = "delete from \"subjects\" where \"subject_id\" = ?";
-        jdbcOperations.update(sql, id);
+        int rowsChanged = jdbcOperations.update(sql, id);
+        if (rowsChanged == 0) {
+            throw new EditInDatabaseException("Can't delete subject with id: " + id);
+        }
     }
 }

@@ -65,8 +65,11 @@ public class GroupsRepository implements IGroupsRepository {
             };
             jdbcOperations.batchUpdate(sql, batchPreparedStatementSetter);
         } catch (DataAccessException e) {
-            System.out.println(e.getMessage());
-            throw new AddInDatabaseException("Can't add groups for lesson :: " + idsList);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Object[] o : idsList) {
+                stringBuilder.append(o[0]).append(":").append(o[1]).append(" - ");
+            }
+            throw new AddInDatabaseException("Can't add groups for lesson :: " + stringBuilder);
         }
     }
 
@@ -101,7 +104,10 @@ public class GroupsRepository implements IGroupsRepository {
     public void editGroup(Group group) {
         try {
             String sql = "update \"groups\" set \"group_name\" = ? where \"group_id\" = ?";
-            jdbcOperations.update(sql, group.getName(), group.getId());
+            int rowsChanged = jdbcOperations.update(sql, group.getName(), group.getId());
+            if (rowsChanged == 0) {
+                throw new EditInDatabaseException("Can't edit group: " + group);
+            }
         } catch (DataAccessException e) {
             throw new EditInDatabaseException("Can't edit group: " + group);
         }
@@ -110,6 +116,9 @@ public class GroupsRepository implements IGroupsRepository {
     @Override
     public void deleteGroupById(long id) {
         String sql = "delete from \"groups\" where \"group_id\" = ?";
-        jdbcOperations.update(sql, id);
+        int rowsChanged = jdbcOperations.update(sql, id);
+        if (rowsChanged == 0) {
+            throw new EditInDatabaseException("Can't delete group with id: " + id);
+        }
     }
 }
