@@ -8,6 +8,7 @@ import org.karabalin.timetablebackend.core.repositories.lessons.interfaces.ILess
 import org.karabalin.timetablebackend.core.repositories.students.interfaces.IStudentsRepository;
 import org.karabalin.timetablebackend.core.services.lessons.interfaces.ILessonsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class LessonsService implements ILessonsService {
     }
 
     @Override
+    @Transactional
     public LessonWithAttendance getLessonById(long id) {
         Lesson lesson = lessonsRepository.getLessonById(id);
         List<Group> groups = groupsRepository.getGroupsByLessonId(id);
@@ -44,6 +46,7 @@ public class LessonsService implements ILessonsService {
     }
 
     @Override
+    @Transactional
     public long addLesson(AddLessonInSchedule addLessonInSchedule) {
         AddLesson addLesson = new AddLesson(addLessonInSchedule.getDate(), addLessonInSchedule.getNumberInSchedule(), addLessonInSchedule.getSubjectId(), addLessonInSchedule.getTeacherId());
         long lessonId = lessonsRepository.addLesson(addLesson);
@@ -63,6 +66,7 @@ public class LessonsService implements ILessonsService {
     }
 
     @Override
+    @Transactional
     public void editLesson(FullLesson fullLesson) {
         Lesson lesson = new Lesson(fullLesson.getId(), fullLesson.getDate(), fullLesson.getNumberInSchedule(), fullLesson.getSubjectId(), fullLesson.getTeacherId());
         List<Object[]> groups = new ArrayList<>();
